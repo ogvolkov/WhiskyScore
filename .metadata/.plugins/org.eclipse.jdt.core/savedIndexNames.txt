@@ -1,0 +1,4 @@
+INDEX VERSION 1.126+D:\development\WhiskyScore\.metadata\.plugins\org.eclipse.jdt.core
+383545601.index
+2481477395.index
+3352491446.index
