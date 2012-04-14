@@ -1,0 +1,37 @@
+package WhiskyScoreParser;
+
+import com.itextpdf.text.pdf.parser.ImageRenderInfo;
+import com.itextpdf.text.pdf.parser.LineSegment;
+import com.itextpdf.text.pdf.parser.RenderListener;
+import com.itextpdf.text.pdf.parser.TextRenderInfo;
+import com.itextpdf.text.pdf.parser.Vector;
+
+public class AlignedPdfTextListener implements RenderListener{
+		private ArrayList<PdfTextBlock> textBlocks;
+		
+		@Override
+		public void renderText(TextRenderInfo renderInfo) {
+			System.out.print(renderInfo.getText());
+			System.out.print(" - ");
+			LineSegment baseLine = renderInfo.getBaseline();
+			Vector pos = baseLine.getStartPoint();
+			System.out.print(pos.get(Vector.I1));
+			System.out.print(" ");
+			System.out.print(pos.get(Vector.I2));
+			System.out.print(" ");
+			System.out.print(pos.get(Vector.I3));
+			System.out.println();
+		}
+
+		@Override
+		public void beginTextBlock() {					
+		}
+
+		@Override
+		public void endTextBlock() {			
+		}
+
+		@Override
+		public void renderImage(ImageRenderInfo arg0) {			
+		}	
+}

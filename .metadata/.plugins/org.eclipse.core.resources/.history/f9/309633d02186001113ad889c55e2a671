@@ -1,0 +1,8 @@
+package WhiskyScoreParser;
+
+public class ClassicDramParser {
+	public ClassicDramParser()
+	{
+		
+	}
+}

@@ -1,0 +1,33 @@
+package WhiskyScoreParser;
+
+import java.util.ArrayList;
+
+import com.itextpdf.text.pdf.parser.*;
+
+public class AlignedPdfTextListener implements RenderListener{
+		private ArrayList<PdfTextBlock> textBlocks;
+		
+		public void clear()
+		{
+			textBlocks.clear();
+		}
+		
+		@Override
+		public void renderText(TextRenderInfo renderInfo) {
+			String text = renderInfo.getText();			
+			Vector origin = renderInfo.getBaseline().getStartPoint();
+			textBlocks.add(new PdfTextBlock(text, origin.get(Vector.I2), origin.get(Vector.I1)));			
+		}
+
+		@Override
+		public void beginTextBlock() {					
+		}
+
+		@Override
+		public void endTextBlock() {			
+		}
+
+		@Override
+		public void renderImage(ImageRenderInfo arg0) {			
+		}	
+}

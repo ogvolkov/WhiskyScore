@@ -1,0 +1,32 @@
+package WhiskyScoreParser;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.*;
+
+public class ClassicDramParser {
+	public void Parse(InputStream stream) throws IOException{	
+		PdfReader pdfReader = null;		
+		
+		try{
+			pdfReader = new PdfReader(stream);
+			PdfReaderContentParser contentParser = new PdfReaderContentParser(pdfReader);
+			
+			int pages = 2/*pdfReader.getNumberOfPages()*/;
+			
+			TextExtractionStrategy strategy;
+			for(int page=1; page <= pages; page++){
+				strategy = contentParser.processContent(page, new LocationTextExtractionStrategy());
+				System.out.println(strategy.getResultantText());
+			}
+		}
+		finally{
+			if (pdfReader != null)
+			{
+				pdfReader.close();
+			}
+		}
+	}
+}
