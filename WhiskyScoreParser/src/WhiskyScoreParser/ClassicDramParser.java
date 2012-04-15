@@ -81,6 +81,6 @@ public class ClassicDramParser {
 	}
 	
 	private static Boolean isCorrectWhiskyName(String text){		
-		return Character.isUpperCase(text.charAt(0)) &&Character.isUpperCase(text.charAt(1));
+		return Character.isUpperCase(text.charAt(0)) && Character.isUpperCase(text.charAt(1));
 	}	
 }
