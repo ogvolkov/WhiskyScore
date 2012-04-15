@@ -1,7 +1,6 @@
 package WhiskyScoreParser;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -13,6 +12,13 @@ public class Parser {
 		
 		input = new FileInputStream(path);
 		ClassicDramParser parser = new ClassicDramParser();
-		parser.Parse(input);
+		parser.parse(input);
+		
+		System.out.println("Parsed scores:");
+		for(WhiskyScore score: parser.getScores()){			
+			System.out.print(score.getName());
+			System.out.print(" ");
+			System.out.println(score.getRating());
+		}		
 	}
 }

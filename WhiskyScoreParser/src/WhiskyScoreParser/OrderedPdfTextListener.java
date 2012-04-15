@@ -3,6 +3,7 @@ package WhiskyScoreParser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import com.itextpdf.text.pdf.parser.*;
 
@@ -21,9 +22,9 @@ public class OrderedPdfTextListener implements RenderListener{
 			textBlocks.clear();
 		}
 		
-		public Iterable<Iterable<String>> getLines()
+		public Iterable<List<String>> getLines()
 		{
-			ArrayList<Iterable<String>> result = new ArrayList<Iterable<String>>();
+			ArrayList<List<String>> result = new ArrayList<List<String>>();
 			
 			// sort result in order left to right, top to bottom but take in account possible Y deviation
 			Collections.sort(textBlocks, new Comparator<PdfTextBlock>(){

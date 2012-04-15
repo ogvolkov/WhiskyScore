@@ -5,3 +5,5 @@
 1334437034601	Delete element
 1334438641032	Rename compilation unit 'AlignedPdfTextListener.java'
 1334438870981	Delete element
+1334493022073	Rename method 'Parse'
+1334493046785	Rename method 'ProcessLine'

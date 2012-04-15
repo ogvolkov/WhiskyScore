@@ -1,0 +1,73 @@
+package WhiskyScoreParser;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.pdf.parser.*;
+
+public class ClassicDramParser {
+	private ArrayList<WhiskyScore> scores = new ArrayList<WhiskyScore>();
+	
+	public void Parse(InputStream stream) throws IOException{	
+		PdfReader pdfReader = null;				
+		
+		try{
+
+			pdfReader = new PdfReader(stream);
+			OrderedPdfTextListener textListener = new OrderedPdfTextListener(5.0f);
+			PdfContentStreamProcessor contentProcessor = new PdfContentStreamProcessor(textListener);
+			
+			int pages = 2/*pdfReader.getNumberOfPages()*/;
+						
+			for(int page=2; page <= pages; page++){
+				textListener.clear();
+				
+				PdfDictionary pageDictionary = pdfReader.getPageN(page);
+				PdfDictionary resourceDictionary = pageDictionary.getAsDict(PdfName.RESOURCES);
+				
+				byte[] pageData = ContentByteUtils.getContentBytesForPage(pdfReader, page);
+				contentProcessor.processContent(pageData, resourceDictionary);
+				
+				for(List<String> line: textListener.getLines()){
+					ProcessLine(line);
+				}
+			}
+		}
+		finally{
+			if (pdfReader != null)
+			{
+				pdfReader.close();
+			}
+		}
+	}	
+	
+	private void ProcessLine(List<String> line){
+		if (line.size() < 2) return;
+		
+		String firstCell = line.get(0);	
+		if (!isFloat(firstCell)) return; // TODO: handle multi-line cells
+		
+		String name = line.get(1);
+		if(line.size() > 2){
+			String description = line.get(2);
+			if (description != null){
+				name = name + " " + description;
+			}
+		}
+		
+		scores.add(new WhiskyScore(name, firstCell));
+	}
+	
+	private static Boolean isFloat(String text){		
+		try{
+			Float.parseFloat(text);
+			return true;
+		}
+		catch(NumberFormatException e){
+			return false;
+		}
+	}
+}
