@@ -3,6 +3,7 @@ package org.whiskyscore.android;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,20 +28,20 @@ public class WhiskyScoreActivity extends Activity {
         final EditText whiskyName = (EditText) findViewById(R.id.whiskyName);
         final ListView result = (ListView) findViewById(R.id.result);
         
+        
         whiskyName.setOnKeyListener(new OnKeyListener() {			
 			public boolean onKey(View arg0, int arg1, KeyEvent arg2) {
-				ArrayList<String> results = new ArrayList<String>();
+				ArrayList<WhiskyScore> results = new ArrayList<WhiskyScore>();
+				
 				String searchTerm = whiskyName.getText().toString().toLowerCase();
 			    
 				for(WhiskyScore score: scores){
-			    	String name = score.getName();
-			    	String rating = score.getRating();			    
-			    	if(name.toLowerCase().startsWith(searchTerm)){
-			    		results.add(name + " [" + rating + "]");
+			    	if(score.getName().toLowerCase().startsWith(searchTerm)){
+			    		results.add(score);
 			    	}
 			    }
 				
-			    result.setAdapter(new ArrayAdapter<String>(WhiskyScoreActivity.this, android.R.layout.simple_list_item_1, results));
+			    result.setAdapter(new ScoreAdapter(getApplicationContext(), results));
 				return false;
 			}
 		});         
