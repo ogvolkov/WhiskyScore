@@ -13,7 +13,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 public class WhiskyScoreActivity extends Activity {
-    /** Called when the activity is first created. */
+    private Iterable<WhiskyScore> scores;
+    
+    private ArrayList<WhiskyScore> results;
+    
+    private String searchTerm;
+    
+    private final String searchTermKey = "searchTerm"; 
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,28 +29,46 @@ public class WhiskyScoreActivity extends Activity {
         // load data        
         ScoresLoader loader = new ScoresLoader(getAssets());
         loader.load();
-        final Iterable<WhiskyScore> scores = loader.getScores();
+        scores = loader.getScores();                      
         
-        // prepare event handlers
-        final EditText whiskyName = (EditText) findViewById(R.id.whiskyName);
+        // prepare result
+        results = new ArrayList<WhiskyScore>();
         final ListView result = (ListView) findViewById(R.id.result);
+        result.setAdapter(new ScoreAdapter(getApplicationContext(), results));
         
+        // restore previous state (e.g. when screen orientation changes)
+        if (savedInstanceState != null) {
+        	searchTerm = savedInstanceState.getString(searchTermKey);
+        	FilterScores(searchTerm);
+        }
+                     
+        // update results when search text is changed
+        final EditText whiskyName = (EditText) findViewById(R.id.whiskyName);
         
         whiskyName.setOnKeyListener(new OnKeyListener() {			
-			public boolean onKey(View arg0, int arg1, KeyEvent arg2) {
-				ArrayList<WhiskyScore> results = new ArrayList<WhiskyScore>();
-				
-				String searchTerm = whiskyName.getText().toString().toLowerCase();
-			    
-				for(WhiskyScore score: scores){
-			    	if(score.getName().toLowerCase().startsWith(searchTerm)){
-			    		results.add(score);
-			    	}
-			    }
-				
-			    result.setAdapter(new ScoreAdapter(getApplicationContext(), results));
+			public boolean onKey(View arg0, int arg1, KeyEvent arg2) {						
+				searchTerm = whiskyName.getText().toString().toLowerCase();
+				FilterScores(searchTerm);
 				return false;
 			}
 		});         
+    }
+    
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+    	if (searchTerm != null && searchTerm != "") {
+    		outState.putString(searchTermKey, searchTerm);
+    	}
+    }
+    
+    private void FilterScores(String searchString)
+    {
+    	results.clear();
+    	
+    	for(WhiskyScore score: scores) {
+	    	if(score.getName().toLowerCase().startsWith(searchString)){
+	    		results.add(score);
+	    	}
+	    }
     }
 }
